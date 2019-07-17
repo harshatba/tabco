@@ -2,7 +2,7 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file. */
 
-html {
+/* html {
   overflow-x: hidden;
   width: 800px;
 }
@@ -12,13 +12,13 @@ body {
    width: 800px;
    background: #dce1e8;
    margin: 0px;
-}
+} */
 
 #outer{
   padding: 10px
 }
 #search_container {
-  
+
   display: block;
     /*border: 1px solid #d8e4e7;*/
     margin: 0 auto;
@@ -69,7 +69,7 @@ body {
   margin-top: 5px;
 }
 .app {
-   
+
    width: 49%;  /* Or whatever */
   height: 50px; /* Or whatever */
   margin: auto;  /* Magic! */
@@ -78,10 +78,10 @@ body {
     /*margin-bottom: 7px;*/
     /*margin-left: 2px;*/
     /*margin-right: 20px;*/
-    
+
     overflow: hidden;
         display: flex;
-     flex-flow: nowrap; 
+     flex-flow: nowrap;
          background: whitesmoke;
              background: #fdfdfd;
     box-shadow: 0 1px 2px rgba(0,0,0,.1);

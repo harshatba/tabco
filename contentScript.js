@@ -1,19 +1,17 @@
-'use strict'
-;(function() {
+'use strict';
+
+(function () {
     var Config = {
-        DEFAULT_FAVICON:
-            'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAAMklEQVR4AWMgEkT9R4INWBUgKX0Q1YBXQYQCkhKEMDILogSnAhhEV4AGRqoCTEhkPAMAbO9DU+cdCDkAAAAASUVORK5CYII=',
+        DEFAULT_FAVICON: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAAMklEQVR4AWMgEkT9R4INWBUgKX0Q1YBXQYQCkhKEMDILogSnAhhEV4AGRqoCTEhkPAMAbO9DU+cdCDkAAAAASUVORK5CYII=',
 
         // Templates
-        MAIN_TEMPLATE:
-            '<div class="tab-switcher" style="display: none;">' +
+        MAIN_TEMPLATE: '<div class="tab-switcher" style="display: none;">' +
             '<input type="text" placeholder="Search by Title">' +
             '<ul class="tabs-list">' +
             '</ul>' +
             '</div>',
 
-        TAB_TEMPLATE:
-            '<li data-tab-id="{id}" data-window-id="{windowId}" class="tab-item">' +
+        TAB_TEMPLATE: '<li data-tab-id="{id}" data-window-id="{windowId}" class="tab-item">' +
             '<span class="favicon-img">' +
             '<img src="{favicon}" onerror="this.src=\'{default_favicon}\';">' +
             '</span>' +
@@ -28,8 +26,6 @@
         TAB_ITEM: '.tab-item',
         TAB_INPUT: '.tab-switcher input[type="text"]',
         TAB_SWITCHER_CONTAINER: 'body',
-
-        MASTER_KEY: '⌘+⇧+l, ⌃+⇧+l',
 
         DOWN_KEY: 40,
         UP_KEY: 38,
@@ -54,48 +50,47 @@
     var BrowserTab = {
         allTabs: [],
 
-        close: function(tabId) {
-            chrome.extension.sendMessage(
-                {
+        close: function (tabId) {
+            chrome.extension.sendMessage({
                     type: 'closeTab',
                     params: {
                         tabId: tabId
                     }
                 },
-                function(res) {}
+                function (res) {}
             )
 
             return true
         },
 
-        switch: function(tabId, windowId) {
-            chrome.extension.sendMessage(
-                {
+        switch: function (tabId, windowId) {
+            chrome.extension.sendMessage({
                     type: 'switchTab',
                     params: {
                         tabId: tabId,
                         windowId: windowId
                     }
                 },
-                function(res) {}
+                function (res) {}
             )
         },
 
-        togglePin: function(tabId, windowId) {
-            chrome.extension.sendMessage(
-                {
+        togglePin: function (tabId, windowId) {
+            chrome.extension.sendMessage({
                     type: 'togglePin',
                     params: {
                         tabId: tabId,
                         windowId: windowId
                     }
                 },
-                function(res) {}
+                function (res) {}
             )
         },
 
-        getAll: function(callback) {
-            chrome.extension.sendMessage({ type: 'getTabs' }, function(tabs) {
+        getAll: function (callback) {
+            chrome.extension.sendMessage({
+                type: 'getTabs'
+            }, function (tabs) {
                 if (!tabs) {
                     return false
                 }
@@ -107,14 +102,13 @@
 
     function TabSwitcher() {
         var tabsHtml = [],
-            selectedIndex = 0;
+            selectedIndex = 0
 
         function populateTabs(tabs) {
-            tabsHtml = getTabsHtml(tabs);
-            console.log(tabsHtml);
-            $(Config.TAB_LIST).empty();
-            tabsHtml.forEach(function(tabHtml) {
-                $(Config.TAB_LIST).append(tabHtml);
+            tabsHtml = getTabsHtml(tabs)
+            $(Config.TAB_LIST).empty()
+            tabsHtml.forEach(function (tabHtml) {
+                $(Config.TAB_LIST).append(tabHtml)
             })
 
             tabsHtml[0].addClass(Config.SELECTED_CLASS)
@@ -122,9 +116,9 @@
 
         function hideSwitcher() {
             // return;
-            $(Config.TAB_LIST).empty();
-            $(Config.TAB_SWITCHER).hide();
-            $(Config.TAB_INPUT).val('');
+            $(Config.TAB_LIST).empty()
+            $(Config.TAB_SWITCHER).hide()
+            $(Config.TAB_INPUT).val('')
         }
 
         function getSwitcherAction(keyCode) {
@@ -151,7 +145,7 @@
         }
 
         function moveTabFocus(action) {
-            var movement = 0;
+            var movement = 0
             if (action === Config.GOING_DOWN) {
                 movement = 2
             } else if (action === Config.GOING_UP) {
@@ -164,7 +158,7 @@
 
             tabsHtml[selectedIndex].removeClass(Config.SELECTED_CLASS)
 
-            var tempSelectedIndex = selectedIndex + movement;
+            var tempSelectedIndex = selectedIndex + movement
 
             if (tempSelectedIndex > tabsHtml.length - 1) {
                 if (selectedIndex == tabsHtml.length - 1) {
@@ -181,10 +175,8 @@
             } else {
                 selectedIndex = tempSelectedIndex
             }
-            tabsHtml[selectedIndex].addClass(Config.SELECTED_CLASS);
-            tabsHtml[selectedIndex].get(0).scrollIntoViewIfNeeded();
-            console.log(selectedIndex);
-            console.log(tabsHtml);
+            tabsHtml[selectedIndex].addClass(Config.SELECTED_CLASS)
+            tabsHtml[selectedIndex].get(0).scrollIntoViewIfNeeded()
         }
 
         function closeSelectedTab() {
@@ -249,8 +241,8 @@
         }
 
         function getTabsHtml(tabs) {
-            var tempTabsHtml = [];
-            tabs.forEach(function(tab) {
+            var tempTabsHtml = []
+            tabs.forEach(function (tab) {
                 var tempTabTemplate = Config.TAB_TEMPLATE,
                     faviconUrl = tab.favIconUrl || Config.DEFAULT_FAVICON
 
@@ -273,20 +265,18 @@
                 )
 
                 tempTabsHtml.push($(tempTabTemplate))
-            });
-            return tempTabsHtml;
+            })
+            return tempTabsHtml
         }
 
         function filterTabs(keyword) {
-            // console.log(keyword);
-
             keyword = keyword.toLowerCase()
 
             var matches = [],
                 tempTitle = '',
                 tempUrl = ''
 
-            BrowserTab.allTabs.map(function(tab) {
+            BrowserTab.allTabs.map(function (tab) {
                 tempTitle = tab.title.toLowerCase()
                 tempUrl = tab.url.toLowerCase()
 
@@ -316,17 +306,17 @@
             }
 
             $tabSwitcher.show()
-            selectedIndex = 0;
+            selectedIndex = 0
         }
 
         return {
-            loadExtension: function($container) {
+            loadExtension: function ($container) {
                 appendTabSwitcherHtml($container)
                 this.bindUI()
             },
 
-            bindUI: function() {
-                $(document).on('mousedown', Config.TAB_ITEM, function() {
+            bindUI: function () {
+                $(document).on('mousedown', Config.TAB_ITEM, function () {
                     var $this = $(this),
                         tabId = $this.data('tabId'),
                         windowId = $this.data('windowId')
@@ -334,17 +324,17 @@
                     BrowserTab.switch(tabId, windowId)
                 })
 
-                $(document).on('blur', Config.TAB_INPUT, function() {
+                $(document).on('blur', Config.TAB_INPUT, function () {
                     hideSwitcher()
                 })
 
-                $(document).on('keydown', Config.TAB_INPUT, function(e) {
+                $(document).on('keydown', Config.TAB_INPUT, function (e) {
                     if ($(Config.TAB_SWITCHER).is(':visible')) {
                         handleKeyPress(e)
                     }
                 })
 
-                $(document).on('keyup', Config.TAB_INPUT, function(e) {
+                $(document).on('keyup', Config.TAB_INPUT, function (e) {
                     var keyCode = e.keyCode,
                         action = getSwitcherAction(keyCode)
 
@@ -368,18 +358,24 @@
                     }
                 })
 
-                key(Config.MASTER_KEY, function() {
-                    showTabSwitcher()
-                    $(Config.TAB_INPUT).focus()
-
-                    BrowserTab.getAll(populateTabs)
-                })
+                chrome.runtime.onMessage.addListener(
+                    function (request, sender, sendResponse) {
+                        if (request.type === "command") {
+                            //  To do something
+                            showTabSwitcher()
+                            $(Config.TAB_INPUT).focus()
+                            BrowserTab.getAll(populateTabs)
+                        }
+                        sendResponse(true);
+                    }
+                );
             }
         }
     }
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         var tabSwitcher = new TabSwitcher()
         tabSwitcher.loadExtension(Config.TAB_SWITCHER_CONTAINER)
     })
+
 })()
