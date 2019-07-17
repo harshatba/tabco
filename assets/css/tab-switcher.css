@@ -67,13 +67,13 @@ background: #dce1e8;
 }
 
 .tab-switcher .tabs-list li {
- 
+
   width: 49%;  /* Or whatever */
   height: 50px; /* Or whatever */
-  margin: 2px auto;  /* Magic! */
+  margin: 2px;  /* Magic! */
   overflow: hidden;
         display: flex;
-     flex-flow: nowrap; 
+     flex-flow: nowrap;
           background: whitesmoke;
              background: #fdfdfd;
     box-shadow: 0 1px 2px rgba(0,0,0,.1);
