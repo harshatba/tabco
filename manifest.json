@@ -1,7 +1,7 @@
 {
   "name": "Tabco - Search between open tabs",
   "description": "Search between tabs, find duplicate easily. Tabco is a simple tool to help you save time.",
-  "version": "0.7.4",
+  "version": "0.7.5",
   "permissions": ["tabs", "http://*/*", "https://*/*", "<all_urls>"],
   "browser_action": {
     "default_icon": "browser_action_icon.png",
@@ -17,8 +17,8 @@
   "commands": {
     "showTabSwitcher": {
       "suggested_key": {
-        "default": "Ctrl+Shift+L",
-        "mac": "Command+Shift+L"
+        "default": "Ctrl+Shift+E",
+        "mac": "Command+Shift+E"
       },
       "description": "Toggle feature"
     }

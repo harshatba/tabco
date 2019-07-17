@@ -16,15 +16,28 @@ chrome.commands.onCommand.addListener(function (command) {
     });
 });
 
+var tabIdsSorted = [];
+
+
+chrome.tabs.onActivated.addListener(function(activeInfo) {
+    const index = tabIdsSorted.indexOf(activeInfo.tabId);
+    if (index > -1) {
+        tabIdsSorted.splice(index, 1);
+    }
+    tabIdsSorted.push(activeInfo.tabId);
+});
+
 
 chrome.runtime.onMessage.addListener(function (req, sender, sendResponse) {
     var handler = {
         getTabs: function () {
             chrome.tabs.query({}, function (tabs) {
-                sendResponse(tabs)
+                var sortedTabs = tabs.sort(function(a, b){
+                    return tabIdsSorted.indexOf(b.id) - tabIdsSorted.indexOf(a.id);
+                  });
+                sendResponse(sortedTabs);
             })
-
-            return true
+            return true;
         },
         switchTab: function (params) {
             chrome.tabs.update(params.tabId, {

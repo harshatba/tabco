@@ -29,7 +29,7 @@ body {
     -moz-border-radius: 4px;*/
 }
 
-#search {
+/* #search {
     font-size: 25px;
     padding-left: 2%;
     color: #808b96;
@@ -41,6 +41,7 @@ body {
     width: 97%;
     height: 100%;
     /*padding-left: 40px;*/
+    /*
     color: inherit;
     text-transform: inherit;
     font-weight: inherit;
@@ -61,7 +62,7 @@ body {
 #search:focus {
     outline: none;
     box-shadow: 0 2px 5px rgba(0,0,0,.08);
-}
+} */
 
 #apps{
   display: flex;
