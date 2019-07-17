@@ -1,15 +1,23 @@
 'use strict';
 
+function stringFormat (a, args) {
+    for (var k in args) {
+        a = a.replace("{" + k + "}", args[k])
+    }
+    return a
+}
+
+
 (function () {
     var Config = {
         DEFAULT_FAVICON: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAAMklEQVR4AWMgEkT9R4INWBUgKX0Q1YBXQYQCkhKEMDILogSnAhhEV4AGRqoCTEhkPAMAbO9DU+cdCDkAAAAASUVORK5CYII=',
 
         // Templates
-        MAIN_TEMPLATE: '<div class="tab-switcher" style="display: none;">' +
+        MAIN_TEMPLATE: $('<div class="tab-switcher" style="display: none;">' +
             '<input type="text" placeholder="Search by Title">' +
             '<ul class="tabs-list">' +
             '</ul>' +
-            '</div>',
+            '</div>'),
 
         TAB_TEMPLATE: '<li data-tab-id="{id}" data-window-id="{windowId}" class="tab-item">' +
             '<span class="favicon-img">' +
@@ -19,9 +27,6 @@
             '</li>',
 
         SELECTED_CLASS: 'selected-tab',
-        TAB_SELECTED: '.selected-tab',
-        FAVICON_IMG: '.favicon-img img',
-        TAB_SWITCHER: '.tab-switcher',
         TAB_LIST: '.tab-switcher .tabs-list',
         TAB_ITEM: '.tab-item',
         TAB_INPUT: '.tab-switcher input[type="text"]',
@@ -111,13 +116,15 @@
                 $(Config.TAB_LIST).append(tabHtml)
             })
 
-            tabsHtml[0].addClass(Config.SELECTED_CLASS)
+            try {
+                tabsHtml[0].addClass(Config.SELECTED_CLASS)
+            } catch (e) {}
         }
 
         function hideSwitcher() {
             // return;
             $(Config.TAB_LIST).empty()
-            $(Config.TAB_SWITCHER).hide()
+            $(Config.MAIN_TEMPLATE).hide()
             $(Config.TAB_INPUT).val('')
         }
 
@@ -180,12 +187,8 @@
         }
 
         function closeSelectedTab() {
-            var $firstSelected = $(Config.TAB_SWITCHER)
-                .find(Config.TAB_SELECTED)
-                .first()
-
-            if (BrowserTab.close($firstSelected.data('tabId'))) {
-                $firstSelected.remove()
+            if (BrowserTab.close(tabsHtml[selectedIndex].data('tabId'))) {
+                tabsHtml[selectedIndex].remove()
                 $(Config.TAB_ITEM)
                     .first()
                     .addClass(Config.SELECTED_CLASS)
@@ -193,22 +196,16 @@
         }
 
         function switchSelectedTab() {
-            var $firstSelected = $(Config.TAB_SWITCHER)
-                .find(Config.TAB_SELECTED)
-                .first()
             BrowserTab.switch(
-                $firstSelected.data('tabId'),
-                $firstSelected.data('windowId')
+                tabsHtml[selectedIndex].data('tabId'),
+                tabsHtml[selectedIndex].data('windowId')
             )
         }
 
         function togglePinTab() {
-            var $firstSelected = $(Config.TAB_SWITCHER)
-                .find(Config.TAB_SELECTED)
-                .first()
             BrowserTab.togglePin(
-                $firstSelected.data('tabId'),
-                $firstSelected.data('windowId')
+                tabsHtml[selectedIndex].data('tabId'),
+                tabsHtml[selectedIndex].data('windowId')
             )
         }
 
@@ -223,7 +220,7 @@
                     moveTabFocus(action)
                     break
                 case Config.ESCAPING:
-                    $(Config.TAB_SWITCHER).hide()
+                    Config.MAIN_TEMPLATE.hide()
                     break
                 case Config.CLOSING:
                     // Because we are using `;` to close so prevent entering
@@ -243,27 +240,13 @@
         function getTabsHtml(tabs) {
             var tempTabsHtml = []
             tabs.forEach(function (tab) {
-                var tempTabTemplate = Config.TAB_TEMPLATE,
-                    faviconUrl = tab.favIconUrl || Config.DEFAULT_FAVICON
-
-                tempTabTemplate = tempTabTemplate.replace(
-                    '{favicon}',
-                    faviconUrl
-                )
-                tempTabTemplate = tempTabTemplate.replace(
-                    '{default_favicon}',
-                    Config.DEFAULT_FAVICON
-                )
-                tempTabTemplate = tempTabTemplate.replace(
-                    '{title}',
-                    sanitizeHtml(tab.title)
-                )
-                tempTabTemplate = tempTabTemplate.replace('{id}', tab.id)
-                tempTabTemplate = tempTabTemplate.replace(
-                    '{windowId}',
-                    tab.windowId
-                )
-
+                var tempTabTemplate = stringFormat(Config.TAB_TEMPLATE, {
+                    'favicon': tab.favIconUrl || Config.DEFAULT_FAVICON,
+                    'default_favicon': Config.DEFAULT_FAVICON,
+                    'title': sanitizeHtml(tab.title),
+                    'windowId': tab.windowId,
+                    'id': tab.id
+                })
                 tempTabsHtml.push($(tempTabTemplate))
             })
             return tempTabsHtml
@@ -298,14 +281,7 @@
         }
 
         function showTabSwitcher() {
-            var $tabSwitcher = $(Config.TAB_SWITCHER)
-
-            if ($tabSwitcher.length === 0) {
-                appendTabSwitcherHtml(Config.TAB_SWITCHER_CONTAINER)
-                $tabSwitcher = $(Config.TAB_SWITCHER)
-            }
-
-            $tabSwitcher.show()
+            Config.MAIN_TEMPLATE.show()
             selectedIndex = 0
         }
 
@@ -329,7 +305,7 @@
                 })
 
                 $(document).on('keydown', Config.TAB_INPUT, function (e) {
-                    if ($(Config.TAB_SWITCHER).is(':visible')) {
+                    if (Config.MAIN_TEMPLATE.is(':visible')) {
                         handleKeyPress(e)
                     }
                 })
