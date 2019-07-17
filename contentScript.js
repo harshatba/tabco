@@ -1,6 +1,6 @@
 'use strict';
 
-function stringFormat (a, args) {
+function stringFormat(a, args) {
     for (var k in args) {
         a = a.replace("{" + k + "}", args[k])
     }
@@ -14,7 +14,7 @@ function stringFormat (a, args) {
 
         // Templates
         MAIN_TEMPLATE: $('<div class="tab-switcher" style="display: none;">' +
-            '<input type="text" placeholder="Search by Title">' +
+            '<input type="text" placeholder="Search across Tabs">' +
             '<ul class="tabs-list">' +
             '</ul>' +
             '</div>'),
@@ -252,6 +252,26 @@ function stringFormat (a, args) {
             return tempTabsHtml
         }
 
+        function match(search, text) {
+            search = search.toUpperCase();
+            text = text.toUpperCase();
+
+            var j = -1;
+
+            for (var i = 0; i < search.length; i++) {
+                var l = search[i];
+                if (l == ' ') {
+                    continue;
+                }
+
+                j = text.indexOf(l, j+1);
+                if (j == -1) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         function filterTabs(keyword) {
             keyword = keyword.toLowerCase()
 
@@ -263,7 +283,7 @@ function stringFormat (a, args) {
                 tempTitle = tab.title.toLowerCase()
                 tempUrl = tab.url.toLowerCase()
 
-                if (tempTitle.match(keyword) || tempUrl.match(keyword)) {
+                if (match(keyword, tempTitle) || match(keyword, tempUrl)) {
                     matches.push(tab)
                 }
             })
