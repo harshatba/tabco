@@ -294,21 +294,26 @@ function stringFormat(a, args) {
                 tempUrl = tab.url.toLowerCase()
                 var parser = document.createElement('a');
                 parser.href = tempUrl;
-                var score = 0
+                var scores = [];
                 // if (match(keyword,))
-                var checkers = [tempTitle, parser.hostname, tempUrl];
+                var checkers = [tempTitle, parser.hostname];
                 for (var i=0; i < checkers.length; i++) {
                     var checker = checkers[i];
                     var r = match(keyword, checker);
                     if (r[0]) {
-                        tab.score = r[1];
-                        matches.push(tab);
-                        break;
+                        scores.push(r[1]);
+                    }
+                    if (checker.match(keyword)) {
+                        scores.push(0);
                     }
                 }
+                if (scores.length > 0) {
+                    tab.score = scores.sort()[0]
+                    matches.push(tab);
+                }
             })
-
-            populateTabs(matches.sort(function(a, b) { return a.score - b.score; }))
+            var result = matches.sort(function(a, b) { return a.score - b.score; });
+            populateTabs(result);
         }
 
         function appendTabSwitcherHtml($container) {
