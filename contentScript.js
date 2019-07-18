@@ -256,7 +256,9 @@ function stringFormat(a, args) {
             search = search.toUpperCase();
             text = text.toUpperCase();
 
-            var j = -1;
+            var j = -1,
+                indices = [],
+                score = 0;
 
             for (var i = 0; i < search.length; i++) {
                 var l = search[i];
@@ -266,10 +268,18 @@ function stringFormat(a, args) {
 
                 j = text.indexOf(l, j+1);
                 if (j == -1) {
-                    return false;
+                    return [false, 0];
+                } else {
+                    indices.push(j);
                 }
             }
-            return true;
+
+            if (indices.length == 1) {
+                return [true, indices[0]]
+            } else {
+                score = indices[indices.length - 1] - indices[0]
+                return [true, score];
+            }
         }
 
         function filterTabs(keyword) {
@@ -282,13 +292,23 @@ function stringFormat(a, args) {
             BrowserTab.allTabs.map(function (tab) {
                 tempTitle = tab.title.toLowerCase()
                 tempUrl = tab.url.toLowerCase()
-
-                if (match(keyword, tempTitle) || match(keyword, tempUrl)) {
-                    matches.push(tab)
+                var parser = document.createElement('a');
+                parser.href = tempUrl;
+                var score = 0
+                // if (match(keyword,))
+                var checkers = [tempTitle, parser.hostname, tempUrl];
+                for (var i=0; i < checkers.length; i++) {
+                    var checker = checkers[i];
+                    var r = match(keyword, checker);
+                    if (r[0]) {
+                        tab.score = r[1];
+                        matches.push(tab);
+                        break;
+                    }
                 }
             })
 
-            populateTabs(matches)
+            populateTabs(matches.sort(function(a, b) { return a.score - b.score; }))
         }
 
         function appendTabSwitcherHtml($container) {
@@ -359,8 +379,8 @@ function stringFormat(a, args) {
                         if (request.type === "command") {
                             //  To do something
                             showTabSwitcher()
-                            $(Config.TAB_INPUT).focus()
                             BrowserTab.getAll(populateTabs)
+                            $(Config.TAB_INPUT).focus()
                         }
                         sendResponse(true);
                     }
