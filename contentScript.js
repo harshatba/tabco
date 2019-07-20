@@ -7,6 +7,13 @@ function stringFormat(a, args) {
     return a
 }
 
+function htmlToElement(html)
+{
+  var element = document.createElement('div');
+  element.innerHTML = html;
+  return(element);
+}
+
 
 (function () {
     var Config = {
