@@ -356,13 +356,13 @@ function htmlToElement(html)
                     hideSwitcher()
                 })
 
-                $(document).on('keydown', Config.TAB_INPUT, function (e) {
+                $('body').on('keydown', Config.TAB_INPUT, function (e) {
                     if (Config.MAIN_TEMPLATE.is(':visible')) {
                         handleKeyPress(e)
                     }
                 })
 
-                $(document).on('keyup', Config.TAB_INPUT, function (e) {
+                $('body').on('keyup', Config.TAB_INPUT, function (e) {
                     var keyCode = e.keyCode,
                         action = getSwitcherAction(keyCode)
 
