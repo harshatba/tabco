@@ -13,7 +13,7 @@ function stringFormat(a, args) {
         DEFAULT_FAVICON: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAAMklEQVR4AWMgEkT9R4INWBUgKX0Q1YBXQYQCkhKEMDILogSnAhhEV4AGRqoCTEhkPAMAbO9DU+cdCDkAAAAASUVORK5CYII=',
 
         // Templates
-        MAIN_TEMPLATE: $('<div class="tab-switcher" style="display: none;">' +
+        MAIN_TEMPLATE: $('<div class="tabco tab-switcher" style="display: none;">' +
             '<input type="text" placeholder="Search across Tabs">' +
             '<ul class="tabs-list">' +
             '</ul>' +

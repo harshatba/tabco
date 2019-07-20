@@ -1,8 +1,8 @@
-.tab-switcher ul::-webkit-scrollbar {
+.tabco.tab-switcher ul::-webkit-scrollbar {
   display: none;
 }
 
-.tab-switcher {
+.tabco.tab-switcher {
   position: fixed;
   top: 10vh;
   left: 20vw;
@@ -20,7 +20,7 @@
   border-radius: 4px 4px 0px 0px;
 }
 
-.tab-switcher input[type="text"], .tab-switcher input[type="text"]:focus, .tab-switcher input[type="text"]:active {
+.tabco.tab-switcher input[type="text"], .tabco.tab-switcher input[type="text"]:focus, .tabco.tab-switcher input[type="text"]:active {
   display: block;
   border: 0;
   width: 100%;
@@ -42,7 +42,7 @@
 
 }
 
-.tab-switcher ul.tabs-list {
+.tabco.tab-switcher ul.tabs-list {
   width: 100%;
   z-index: 9;
   top: 0;
@@ -58,15 +58,15 @@ background: #dce1e8;
   flex-flow: row wrap;
 }
 
-.tab-switcher ul.tabs-list li.selected-tab, .tab-switcher ul.tabs-list li:hover {
+.tabco.tab-switcher ul.tabs-list li.selected-tab, .tabco.tab-switcher ul.tabs-list li:hover {
   background-color: #DFDFDF;
 }
 
-.tab-switcher ul.tabs-list li.selected-tab {
+.tabco.tab-switcher ul.tabs-list li.selected-tab {
   color: #000;
 }
 
-.tab-switcher .tabs-list li {
+.tabco.tab-switcher .tabs-list li {
 
   width: 49%;  /* Or whatever */
   height: 50px; /* Or whatever */
@@ -84,11 +84,11 @@ background: #dce1e8;
 }
 
 
-.tab-switcher .tabs-list li:not(:last-of-type) {
+.tabco.tab-switcher .tabs-list li:not(:last-of-type) {
   border-bottom: 1px solid #ccc;
 }
 
-.tab-switcher .tabs-list li span.title {
+.tabco.tab-switcher .tabs-list li span.title {
  display: flex;
   flex-direction: column;
 
@@ -106,7 +106,7 @@ background: #dce1e8;
 
 }
 
-.tabs-list li .favicon-img {
+.tabco .tabs-list li .favicon-img {
  flex-direction: column;
     vertical-align: middle;
     margin-left: 5px;
@@ -119,21 +119,21 @@ background: #dce1e8;
     overflow: hidden;
 }
 
-.tabs-list li .favicon-img img {
+.tabco .tabs-list li .favicon-img img {
   width: 24px;
   height: auto;
   vertical-align: bottom;
 }
 
 @media all and (max-width: 600px) {
-  .tab-switcher {
+  .tabco.tab-switcher {
     left: 5vw;
     width: 90vw;
   }
 }
 
 @media all and (min-width: 1500px) {
-  .tab-switcher {
+  .tabco.tab-switcher {
     left: calc(50vw - 500px);
     width: 1000px;
   }
